@@ -1,0 +1,441 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px #933d8c;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #933d8c;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px #933d8c;
+}
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+body {
+    font: 13px/18px 'Lucida Grande', Tahoma, Verdana, sans-serif;
+    color: #404040;
+    background: black;
+    background-size: cover;
+    width: 1340px;
+    margin: auto;
+}
+body a:hover
+{
+    text-shadow: 0 0 10px #933d8c;
+}
+.container {
+    margin: 0 auto;
+    width: 705px;
+    min-height: 36px;
+    margin-right: 0;
+}
+
+header {
+    position: fixed;
+    width: 1340px;
+}
+
+nav {
+    height: 36px;
+    background-color: black;
+    border-top: 1px solid #353939;
+    border-bottom: 1px solid #2e3131;
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
+    font-size: 13.5px;
+}
+nav a {
+    -webkit-transition: 0.1s ease-out;
+    -moz-transition: 0.1s ease-out;
+    -o-transition: 0.1s ease-out;
+    transition: 0.1s ease-out;
+    -webkit-transition-property: background-color, line-height;
+    -moz-transition-property: background-color, line-height;
+    -o-transition-property: background-color, line-height;
+    transition-property: background-color, line-height;
+}
+nav ul {
+    float: left;
+    border-left: 1px solid #353939;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    border-right: 1px solid #4d5354;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+nav li {
+    float: left;
+}
+nav .container a {
+    display: block;
+    padding: 0 20px;
+    line-height: 36px;
+    color: #ddd;
+    text-decoration: none;
+    text-shadow: 0 -1px #2e3131;
+    border-left: 1px solid #4d5354;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    border-right: 1px solid #353939;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+nav .container a:hover {
+    background: #4d5354;
+    background: rgba(255, 255, 255, 0.2);
+}
+nav .container .active a:hover {
+    background: #4d5354;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+nav .container li.active a, nav .container a:active,nav li.primary a {
+    padding: 0 21px;
+    line-height: 33px;
+    color: #eee;
+    background: #0c0f18;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 3px solid #933d8c;
+    background-image: -webkit-linear-gradient(top, #484e4f, #323637);
+    background-image: -moz-linear-gradient(top, #484e4f, #323637);
+    background-image: -o-linear-gradient(top, #373d3e, #323637);
+    background-image: linear-gradient(to bottom, #000000, #323637);
+    -webkit-box-shadow: inset 0 -1px #151717, inset 0 -1px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 -1px #151717, inset 0 -1px 8px rgba(0, 0, 0, 0.2);
+}
+nav li.green a, nav li.green a:active {
+    border-bottom-color: #56c93d;
+}
+nav li.red a, nav li.red a:active {
+    border-bottom-color: #a54e49;
+}
+nav li.purple a, nav li.purple a:active {
+    border-bottom-color: #933d8c;
+}
+nav li.yellow a, nav li.yellow a:active {
+    border-bottom-color: #c0bb30;
+}
+
+nav li.primary a, nav li.primary a:active {
+    border-bottom-color: #0295ff;
+}
+
+/*
+----------------------------------------------------------------------------------------------
+ */
+
+.text-logo
+{
+    width:auto;
+    margin-left: 0;
+    padding-top: 10px;
+    padding-left: 10px;
+    float:left;
+    color: white;
+    font-size: 30px;
+    font-family: Stencil, serif;
+}
+
+.image-container
+{
+    padding-top: 36px;
+    width: 100%;
+    background: url("img/logoback3.jpg");
+
+    background-size: 100% 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.image-logo
+{
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    background-color:rgba(0,0,0,0.6);
+    text-align: center;
+}
+
+.image-logo img
+{
+    margin: auto;
+    width: 300px;
+    height: auto;
+}
+
+.content-back
+{
+    margin: auto;
+    width: 100%;
+    background-image: url("img/logoback.jpg");
+    background-size: 100% 100%;
+
+}
+
+.content
+{
+    margin: auto;
+    width: 80%;
+    background-color: rgba(0,0,0,0.9);
+    text-align: center;
+    padding: 10px;
+    color:white;
+    font-size: 19px;
+    box-shadow: 0 0 10px #933d8c;
+    min-height: 55.5vh;
+}
+
+.title
+{
+    font-size: 40px;
+    margin-bottom: 50px;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+.post
+{
+    width: 100%;
+    margin-bottom: 35px;
+    margin-top: 35px;
+}
+
+.post-title
+{
+    font-size: 23px;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.post-img
+{
+    width:30%;
+}
+
+.post-img img
+{
+    width: 100%;
+    height: auto;
+    float:left;
+    border: 1px solid #933d8c;
+}
+
+.post-content
+{
+    text-align: justify;
+    text-indent: 1rem;
+    line-height: 1.5;
+}
+
+.post-content p
+{
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+
+.post-content .first-p
+{
+    margin-left: 35%;
+    margin-top: 5%;
+}
+.post-content .second-p
+{
+    margin-top: 3vh;
+}
+
+footer
+{
+    height: 36px;
+    background: black;
+    border-top: 1px solid #353939;
+    border-bottom: 1px solid #2e3131;
+}
+
+.social_icons
+{
+    padding-top: 2px;
+    width: 15%;
+    margin-left: 80%;
+    color: white;
+    font-size: 18px;
+}
+
+.social_icons p
+{
+    float:left;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.social_icons li
+{
+    display: inline;
+    margin-left: 5px;
+}
+
+.social_icons img
+{
+    width:30px;
+    height: 30px;
+}
+
+.info
+{
+    padding-left: 20px;
+    padding-right: 20px;
+    width:45%;
+    margin-bottom: 40px;
+    text-align: justify;
+    line-height: 1.2;
+    text-indent: 20px;
+}
+
+.info-left
+{
+    float:left;
+}
+.info-right
+{
+    float:right;
+}
+
+.info-title
+{
+    font-size: 25px;
+    margin-bottom: 2vh;
+    text-align: center;
+    text-indent: 0;
+}
+
+.info-content
+{
+
+}
+
+.content a
+{
+    color:#933d8c;
+    text-decoration: none;
+}
+
+.content a:hover
+{
+    text-shadow: 0 0 10px #933d8c;
+}
+
+footer .text-logo
+{
+    padding-top: 10px;
+}
+
+hr
+{
+    border-color: #933d8c;
+}
+
+.full-block
+{
+    width: 100%;
+    line-height: 2;
+}
+
+.hovergallery img{
+    -webkit-transform:scale(0.8);
+    -moz-transform:scale(0.8);
+    -o-transform:scale(0.8);
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    max-width: 32.5%;
+    border: 1px solid #933d8c;
+    max-height: 210px;
+    z-index: 1;
+}
+
+.hovergallery img:hover{
+    -webkit-transform:scale(1.5);
+    -moz-transform:scale(1.23);
+    -o-transform:scale(1.23);
+    box-shadow:0px 0px 30px #933d8c;
+    -webkit-box-shadow:0px 0px 30px #933d8c;
+    -moz-box-shadow:0px 0px 30px #933d8c;
+    opacity: 1;
+    z-index: 9999;
+    position: relative;
+}
+
+.teams
+{
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.teams th
+{
+    padding: 21px 25px 22px 25px;
+    background-color: rgba(147,61,140,0.5);
+}
+
+.teams tr,.teams td
+{
+    border: 1px solid #933d8c;
+    padding-top: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 0;
+    vertical-align: middle;
+}
+
+.teams img
+{
+    height: 80px;
+}
