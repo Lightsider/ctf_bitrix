@@ -1,6 +1,12 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Результаты");
+
+
+if (!$USER->IsAuthorized()) {
+    LocalRedirect('login.php');
+    die();
+}
 ?>
     <style>
         .content

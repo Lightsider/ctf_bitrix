@@ -22,7 +22,7 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 
     <? if ($USER->IsAuthorized()): ?>
 
-        <!--        --><? // LocalRedirect('login.php') ?>
+        <? LocalRedirect('login.php') ?>
 
     <? else: ?>
     <div class="site-login">

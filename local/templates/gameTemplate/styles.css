@@ -846,7 +846,7 @@ hr {
     right: -12px;
     text-align: center;
     top: -10px;
-    width: 24px;
+    width: 24px !important;
     text-decoration: none;
     font-weight: bold;
     -webkit-border-radius: 12px;
@@ -862,6 +862,7 @@ hr {
 .close:hover {
     background: #0295ff ;
     opacity: 1;
+    color: white !important;
 
 }
 
