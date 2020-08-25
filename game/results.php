@@ -19,11 +19,14 @@ if (!$USER->IsAuthorized()) {
     </style>
 
     <p class="title" style="margin-top: 0">Результаты</p>
-<?$APPLICATION->IncludeComponent("ctfbitrix:user_list", "results", Array(
-	"CACHE_TIME" => "36000000",	// Время кеширования (сек.)
-		"CACHE_TYPE" => "A",	// Тип кеширования
-		"USER_GROUP" => "6",	// Группа пользователей
-		"COMPONENT_TEMPLATE" => "participiants"
+<?$APPLICATION->IncludeComponent(
+	"ctfbitrix:user_list", 
+	"results", 
+	array(
+		"CACHE_TIME" => "36000000",
+		"CACHE_TYPE" => "N",
+		"USER_GROUP" => "6",
+		"COMPONENT_TEMPLATE" => "results"
 	),
 	false
 );?>

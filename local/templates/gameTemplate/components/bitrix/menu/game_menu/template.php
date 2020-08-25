@@ -54,9 +54,9 @@ if (empty($arResult["ALL_ITEMS"]))
                 <div class="credits">
                     <p><b><?= $currentUser['NAME'] ?></b></p>
                     <? if (isset($currentUser['UF_SCORE'])): ?>
-                        <p><?= $currentUser['UF_SCORE'] ?> pts</p>
+                        <p id='score'><?= $currentUser['UF_SCORE'] ?> pts</p>
                     <? else: ?>
-                        <p>0 pts</p>
+                        <p id='score'>0 pts</p>
                     <? endif; ?>
                 </div>
             <? else: ?>

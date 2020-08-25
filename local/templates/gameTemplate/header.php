@@ -6,6 +6,9 @@ IncludeTemplateLangFile(__FILE__);
 <head>
     <? $APPLICATION->ShowHead(); ?>
     <link rel="shortcut icon" href="<?= $APPLICATION->GetTemplatePath("img/logoWhite.png") ?>" type="image/x-icon">
+    <?
+    CJSCore::Init(array("jquery"));
+    ?>
     <title><? $APPLICATION->ShowTitle() ?></title>
 </head>
 <body>
@@ -28,6 +31,7 @@ IncludeTemplateLangFile(__FILE__);
     ),
         false
     );?>
+
 </header>
 <div class="content-back">
     <div class="content">

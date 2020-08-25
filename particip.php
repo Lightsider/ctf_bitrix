@@ -4,6 +4,7 @@ $APPLICATION->SetTitle("Участники");
 ?>
 
 	<p class="title">Участники</p>
+
 <?$APPLICATION->IncludeComponent(
 	"ctfbitrix:user_list",
 	"participiants",

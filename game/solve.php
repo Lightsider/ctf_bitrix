@@ -9,91 +9,116 @@ if (!$USER->IsAuthorized()) {
     LocalRedirect('login.php');
     die();
 }
+$errors = Array();
+
+$_REQUEST['sessid'] = $_POST['sessid']; // для определение сессии из передаваемой формы
+
+$task_id = $_POST['task_id'];
+if (!is_numeric($task_id))
+    $errors['task_id'] = "Неверный id таска";
+$flag = trim($_POST['flag']);
+if (!preg_match("/^School\{[a-z0-9]{0,248}\}$/", $flag))
+    $errors['message'] = "Неверный формат флага";
 
 
+if (check_bitrix_sessid()) {
 
-$_REQUEST['sessid']=$_POST['DATA'][0]['value']; // для определение сессии из передаваемой формы
+    CModule::IncludeModule('iblock');
 
-
-if(check_bitrix_sessid())
-{
-    $errors=array();
-    if(strlen($_POST['DATA'][1]['value'])>255 or strlen($_POST['DATA'][1]['value'])<1)
-        $errors['name']="Имя неверного формата";
-    if(strlen($_POST['DATA'][2]['value'])>255 or strlen($_POST['DATA'][2]['value'])<1)
-        $errors['surname']="Фамилия неверного формата";
-    if(strlen($_POST['DATA'][3]['value'])>255 or strlen($_POST['DATA'][3]['value'])<1)
-        $errors['company_name']="Название компании неверного формата";
-    if(strlen($_POST['DATA'][4]['value'])>255 or strlen($_POST['DATA'][4]['value'])<1)
-        $errors['position']="Должность неверного формата";
-    if(!check_email($_POST['DATA'][5]['value']))
-        $errors['mail']="Почта неверного формата";
-    if(strlen($_POST['DATA'][6]['value'])>255 or strlen($_POST['DATA'][6]['value'])<1 or !is_numeric($_POST['DATA'][6]['value']))
-        $errors['phone']="Телефон неверного формата";
-    if(strlen($_POST['DATA'][7]['value'])>255 or strlen($_POST['DATA'][7]['value'])<1)
-        $errors['where']="Откуда узнали о семинаре неверного формата";
+    $el = new CIBlockElement;
+    $iblock_id = 7;
 
 
-    if(empty($errors))
-    {
-        CModule::IncludeModule('iblock');
+    //Свойства
+    $PROP = array();
 
-        $el = new CIBlockElement;
-        $iblock_id = 6;
-
-
-        //Свойства
-        $PROP = array();
-
-        $PROP['surname'] = strip_tags($_POST['DATA'][2]['value']); //Свойство фамилия
-        $PROP['name'] = strip_tags($_POST['DATA'][1]['value']); //название элемента
-        $PROP['company_name'] = strip_tags($_POST['DATA'][3]['value']); //компания
-        $PROP['position'] = strip_tags($_POST['DATA'][4]['value']); //должность
-        $PROP['mail'] = strip_tags($_POST['DATA'][5]['value']); //почта
-        $PROP['phone'] = strip_tags($_POST['DATA'][6]['value']); // телефон
-        $PROP['from'] = strip_tags($_POST['DATA'][7]['value']); // откуда узнал
+    global $USER;
+    $PROP['task'] = $task_id;
+    $PROP['user'] = $GLOBALS['USER']->GetID();
+    $PROP['result'] = "false";
 
 
-        //Основные поля элемента
-        $fields = array(
-            "DATE_CREATE" => date("d.m.Y H:i:s"), //Передаем дата создания
-            "CREATED_BY" => $GLOBALS['USER']->GetID(),    //Передаем ID пользователя кто добавляет
-            "IBLOCK_SECTION" => "", //ID разделов
-            "IBLOCK_ID" => $iblock_id, //ID информационного блока он 6-ый
-            "PROPERTY_VALUES" => $PROP, // Передаем массив значении для свойств
-            "NAME" => strip_tags($_POST['DATA'][1]['value']." ".$_POST['DATA'][2]['value']),
-            "ACTIVE" => "Y", //поумолчанию делаем активным или ставим N для отключении поумолчанию
-            "PREVIEW_TEXT" => "", //Анонс
-            "PREVIEW_PICTURE" => "", //изображение для анонса
-            "DETAIL_TEXT"    => "",
-            "DETAIL_PICTURE" => "" //изображение для детальной страницы
-        );
+    if (!check_solve($task_id)) {
+        // проверяем правильность
 
-        //Результат в конце отработки
-        if ($ID = $el->Add($fields)) {
-            header('Content-Type: application/json; charset=utf-8');
-            $arr['STATUS']="Y";
+        $arSelect = Array("ID", "NAME", "PROPERTY_flag", "PROPERTY_score");
+        $arFilter = Array("IBLOCK_ID" => 6, "ACTIVE_DATE" => "Y", "ACTIVE" => "Y", "ID" => $task_id);
+        $res = CIBlockElement::GetList(Array(), $arFilter, false, Array("nPageSize" => 100), $arSelect); // Берем задание
+        $ob = $res->GetNextElement();
+        $arOb = $ob->GetFields();
+        $trueFlag = $arOb['PROPERTY_FLAG_VALUE'];
 
-            $arEventFields = array(
-                "EMAIL"  =>  $PROP['mail'] ,
+
+        if ($flag === $trueFlag) {
+            $PROP['result'] = "true";
+
+
+            $rsUser = CUser::GetByID($USER->GetID());
+            $arUser = $rsUser->Fetch();
+
+            $user = new CUser;
+            $newScore = $arUser['UF_SCORE'] + $arOb['PROPERTY_SCORE_VALUE'];
+            $fields = Array(
+                "UF_SCORE" => $newScore,
             );
-            CEvent::SendImmediate("SEND_COUPON", "s1", $arEventFields,"N","8");
-            echo json_encode($arr,JSON_UNESCAPED_UNICODE);
-        } else {
-            echo 'Произошел как-то косяк Попробуйте еще разок';
+
+            $user->Update($USER->GetID(), $fields);
+
+
+        } elseif (!isset($errors['message'])) {
+            $errors['message'] = "Неверный флаг";
         }
-
-
     }
-    else
-    {
-        $errors['STATUS']="N";
+
+    $flag = htmlspecialcharsbx($flag);
+    //Основные поля элемента
+    $fields = array(
+        "DATE_CREATE" => date("d.m.Y H:i:s"), //Передаем дата создания
+        "CREATED_BY" => $GLOBALS['USER']->GetID(),    //Передаем ID пользователя кто добавляет
+        "IBLOCK_SECTION" => "", //ID разделов
+        "IBLOCK_ID" => $iblock_id, //ID информационного блока
+        "PROPERTY_VALUES" => $PROP, // Передаем массив значении для свойств
+        "NAME" => $flag,
+        "ACTIVE" => "Y", //поумолчанию делаем активным или ставим N для отключении поумолчанию
+        "PREVIEW_TEXT" => "", //Анонс
+        "PREVIEW_PICTURE" => "", //изображение для анонса
+        "DETAIL_TEXT" => "",
+        "DETAIL_PICTURE" => "" //изображение для детальной страницы
+    );
+
+
+    //Результат в конце отработки
+    if (!$ID = $el->Add($fields)) {
+        echo 'Произошел как-то косяк Попробуйте еще разок';
+    }
+    if (empty($errors)) {
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode($errors,JSON_UNESCAPED_UNICODE);
+        $arr['STATUS'] = "Y";
+        $arr['message'] = "Вы правильно решили задание";
+        $arr['task_id'] = $task_id;
+        $arr['score'] = $newScore;
+
+        echo json_encode($arr, JSON_UNESCAPED_UNICODE);
+    } else {
+        $errors['STATUS'] = "N";
+        $errors['task_id'] = $task_id;
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($errors, JSON_UNESCAPED_UNICODE);
     }
+} else {
+    echo 'Ошибка сессии';
 }
-else
+
+
+function check_solve($task_id)
 {
-    echo 'Произошел как-то косяк Попробуйте еще разок';
+    global $USER;
+    // Для определения решенных заданий
+    $arSelect = Array("ID", "NAME", "PROPERTY_task.id");
+    $arFilter = Array("IBLOCK_ID" => 7, "ACTIVE_DATE" => "Y", "ACTIVE" => "Y", "PROPERTY_result" => "true",
+        "PROPERTY_user" => $USER->GetID(), "PROPERTY_task.id" => $task_id); // Лог операций
+    $res = CIBlockElement::GetList(Array(), $arFilter, false, Array("nPageSize" => 100), $arSelect);
+    return $res->GetNextElement();
 }
+
 ?>

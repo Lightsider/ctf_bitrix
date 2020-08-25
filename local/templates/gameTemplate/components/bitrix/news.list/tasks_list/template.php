@@ -19,7 +19,7 @@ $this->AddEditAction($arItem['ID'], $arItem['EDIT_LINK'], CIBlock::GetArrayByID(
 $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], CIBlock::GetArrayByID($arItem["IBLOCK_ID"], "ELEMENT_DELETE"), array("CONFIRM" => GetMessage('CT_BNL_ELEMENT_DELETE_CONFIRM')));
 ?>
 
-<? if ($arItem['ID']==$arResult['COMPLETE_TASKS'][0]["PROPERTY_TASK_ID"]): ?>
+<? if (in_array($arItem['ID'],$arResult['COMPLETE_TASKS'])): ?>
     <div class="task-panel complete" id="<?= $arItem['ID'] ?>">
         <? else: ?>
         <div class="task-panel" id="<?= $arItem['ID'] ?>">
@@ -45,7 +45,7 @@ $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], CIBlock::GetArrayB
 
 
     <div id="task<?= $arItem['ID'] ?>" class="modalDialog">
-        <? if ($arItem['ID']==$arResult['COMPLETE_TASKS'][0]["PROPERTY_TASK_ID"]): ?>
+        <? if (in_array($arItem['ID'],$arResult['COMPLETE_TASKS'])): ?>
         <div class="modal complete">
             <? else: ?>
             <div class="modal">
@@ -67,10 +67,11 @@ $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], CIBlock::GetArrayB
 
                 </div>
                 <div class="modal-footer">
-                <? if ($arItem['ID']==$arResult['COMPLETE_TASKS'][0]["PROPERTY_TASK_ID"]): ?>
+                    <? if (in_array($arItem['ID'],$arResult['COMPLETE_TASKS'])): ?>
                     <p> Задание уже решено вашей командой </p>
                     <?else:?>
                     <form id="" action="solve.php" method="post">
+                        <?=bitrix_sessid_post()?>
                         <div class="form-group field-onetask-flag required">
                             <input type="text" id="onetask-flag" class="" name="flag" maxlength="255"
                                    placeholder="School{}" aria-required="true">
@@ -97,29 +98,30 @@ $this->AddDeleteAction($arItem['ID'], $arItem['DELETE_LINK'], CIBlock::GetArrayB
 
                 var data = $(this).serialize();
                 $.ajax({
-                    url: '/solve',
+                    url: 'solve.php',
                     type: 'POST',
                     dataType: 'json',
                     data: data,
                     success: function (res) {
-                        var taskId = "task" + res['id_task'];
+                        var taskId = "task" + res['task_id'];
+                        var modalpanel = $("#" + taskId);
                         if (res['message'] !== "Вы правильно решили задание") {
-                            $("#" + taskId).find(".error").css("display", "block");
-                            $("#" + taskId).find(".error").text(res['message']);
+                            modalpanel.find(".error").css("display", "block");
+                            modalpanel.find(".error").text(res['message']);
                         }
                         else {
-                            var id = res['id_task'];
+                            var id = res['task_id'];
                             $("#" + id).addClass("complete");
-                            console.log($("#" + id).html());
-                            $("#" + taskId).find(".modal").addClass("complete");
-                            $("#" + taskId).find(".modal-footer").html("<p> Задание уже решено вашей командой </p>");
-                            $("#" + taskId).find(".error").text(res['message']);
-                            $("#" + taskId).find(".error").css("display", "block");
+                            modalpanel.find(".modal").addClass("complete");
+                            modalpanel.find(".modal-footer").html("<p> Задание уже решено вашей командой </p>");
+                            modalpanel.find(".error").text(res['message']);
+                            modalpanel.find(".error").css("display", "block");
 
                             //Исправление счета
 
                             $("#score").text(res['score'] + " pts");
 
+                            modalpanel.addClass("complete");
                         }
                     },
                     error: function () {
